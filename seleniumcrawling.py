@@ -15,7 +15,7 @@ chrome_options.add_argument("--no-sandbox")  # 보안 Sandbox 모드 끄기
 
 
 def get_clothes_detail_info(clothes_detail_url):
-    print("get_clothes_detail_info 실행")
+    # print("get_clothes_detail_info 실행")
     # Chrome 드라이버 생성
     driver = webdriver.Chrome(options=chrome_options)
     driver.get(clothes_detail_url)
