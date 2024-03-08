@@ -1,14 +1,27 @@
+from concurrent.futures import ThreadPoolExecutor
 from selenium import webdriver
-from selenium.common import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
+
+# Chrome 옵션 설정
+chrome_options = Options()
+chrome_options.add_argument("--headless")  # Headless 모드 활성화
+chrome_options.add_argument("--disable-gpu")  # GPU 사용 안 함 (가속화 불가)
+chrome_options.add_argument("--no-sandbox")  # 보안 Sandbox 모드 끄기
 
 
 def get_clothes_detail_info(clothes_detail_url):
-    driver = webdriver.Chrome()
+    print("get_clothes_detail_info 실행")
+    # Chrome 드라이버 생성
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get(clothes_detail_url)
-    time.sleep(1)
+    # time.sleep(1)
+    wait = WebDriverWait(driver, 10)
+
     # 제품 이미지 (500x600)
     try:
         big_img_element = driver.find_element(By.CSS_SELECTOR,
@@ -73,12 +86,10 @@ def get_clothes_detail_info(clothes_detail_url):
     except NoSuchElementException:
         pass
 
-
     product_detail_info = {}
     product_detail_info['big_img'] = big_img
     product_detail_info['thickness'] = thickness
     product_detail_info['season'] = seasons
     product_detail_info['size'] = sizes
     product_detail_info['price'] = price
-    print(product_detail_info)
     return product_detail_info
