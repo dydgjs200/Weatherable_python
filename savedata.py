@@ -34,8 +34,8 @@ def get_clothes_list(shopping_mall_url):
             size = clothes_detail_info['size']
             price = clothes_detail_info['price']
 
-            data = {"major_category": "Top",
-                    "middle_category": "Hoodies",
+            data = {"major_category": "Pants",
+                    "middle_category": "Denim",
                     "price": price,
                     "thickness": thickness,
                     "product_name": product_name,
@@ -63,5 +63,6 @@ def get_clothes_list(shopping_mall_url):
 
 
 for i in range(1, 400):
-    product_list_url = f"https://www.musinsa.com/categories/item/001004?d_cat_cd=001004&brand=&list_kind=small&sort=pop_category&sub_sort=&page={i}&display_cnt=90&exclusive_yn=&sale_goods=&timesale_yn=&ex_soldout=&plusDeliveryYn=&kids=&color=&price1=&price2=&shoeSizeOption=&tags=&campaign_id=&includeKeywords=&measure="
+    print(f"{i}번째 페이지")
+    product_list_url = f"https://www.musinsa.com/categories/item/003002?d_cat_cd=003002&brand=&list_kind=small&sort=pop_category&sub_sort=&page={i}&display_cnt=90&exclusive_yn=&sale_goods=&timesale_yn=&ex_soldout=&plusDeliveryYn=&kids=&color=&price1=&price2=&shoeSizeOption=&tags=&campaign_id=&includeKeywords=&measure="
     get_clothes_list(product_list_url)
