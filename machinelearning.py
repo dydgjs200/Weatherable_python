@@ -1,20 +1,36 @@
+import os
 import requests
 from bs4 import BeautifulSoup as bs
 
+for i in range(1, 11):
+    # 주소 수정요망
+    crawling_link = f"https://www.musinsa.com/app/codimap/lists?style_type=chic&tag_no=&brand=&display_cnt=60&list_kind=big&sort=date&page={i}"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    page = requests.get(crawling_link, headers=headers)
+    soup = bs(page.text, "html.parser")
+    smallImgs = soup.select(
+        'body > div.wrap > div.right_area > form > div.right_contents.hover_box > div > ul > li:nth-child(n) > div.style-list-item__thumbnail > a > div > img')
+    # 로컬 디렉토리 경로 (수정 요망)
+    save_dir = r"C:\Users\user\Desktop\Code\project\weatherable\머신러닝학습이미지\스타일\시크"
 
-# ----------------------------------머신러닝 스타일 학습이미지 수집----------------------------------
-# 스트릿 남성 상의 (무신사 검색)
-# page = requests.get("https://www.musinsa.com/search/musinsa/goods?q=%EC%8A%A4%ED%8A%B8%EB%A6%BF+%EB%82%A8%EC%84%B1+%EC%83%81%EC%9D%98&list_kind=small&sortCode=pop&sub_sort=&page=1&display_cnt=0&saleGoods=&includeSoldOut=&setupGoods=&popular=&category1DepthCode=&category2DepthCodes=&category3DepthCodes=&selectedFilters=&category1DepthName=&category2DepthName=&brandIds=&price=&colorCodes=&contentType=&styleTypes=&includeKeywords=&excludeKeywords=&originalYn=N&tags=&campaignId=&serviceType=&eventType=&type=&season=&measure=&openFilterLayout=N&selectedOrderMeasure=&shoeSizeOption=&groupSale=&d_cat_cd=&attribute=&plusDeliveryYn=")
-# 스트릿 여상 상의 (무신사 검색)
-page = requests.get("https://www.musinsa.com/search/musinsa/goods?q=%EC%8A%A4%ED%8A%B8%EB%A6%BF+%EC%97%AC%EC%84%B1+%EC%83%81%EC%9D%98&list_kind=small&sortCode=pop&sub_sort=&page=1&display_cnt=0&saleGoods=&includeSoldOut=&setupGoods=&popular=&category1DepthCode=&category2DepthCodes=&category3DepthCodes=&selectedFilters=&category1DepthName=&category2DepthName=&brandIds=&price=&colorCodes=&contentType=&styleTypes=&includeKeywords=&excludeKeywords=&originalYn=N&tags=&campaignId=&serviceType=&eventType=&type=&season=&measure=&openFilterLayout=N&selectedOrderMeasure=&shoeSizeOption=&groupSale=&d_cat_cd=&attribute=&plusDeliveryYn=")
-soup = bs(page.text, "html.parser")
-elements = soup.select('#searchList > li:nth-child(n) > div.li_inner')
-smallImgs = soup.select('#searchList > li:nth-child(n) > div.li_inner > div.list_img > a > img')
-smallImgArray = []
+    # print(smallImgs)
+    # 디렉토리가 없을 경우 생성
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
 
-for index, element in enumerate(smallImgs):
-    # print('https:'+element.attrs['data-original'])
-    smallImgArray.append('https:'+element.attrs['data-original'])
+    for index, img in enumerate(smallImgs):
+        try:
+            # img_url = 'https:' + img.attrs['src']
+            img_url = 'https:' + img.attrs['data-original']
+            print(index, img_url)
+            img_data = requests.get(img_url).content
+            # 이미지를 로컬 디렉토리에 저장
+            with open(os.path.join(save_dir, f'image_{i}_{index}.jpg'), 'wb') as f:
+                f.write(img_data)
 
-print(smallImgArray)
-print(len(smallImgArray))
+        except Exception as e:
+            continue
+
+    print(f"{i} page 이미지 다운로드 완료")
