@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as bs
-from seleniumcrawling import get_clothes_detail_info
+from seleniumCrawling import get_clothes_detail_info
 
 
 def get_clothes_list(shopping_mall_url):
