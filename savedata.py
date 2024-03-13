@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as bs
-from seleniumcrawling import get_clothes_detail_info
+from Weatherable_python.Crawling.seleniumCrawling import get_clothes_detail_info
 from pymongo import MongoClient
 
 # mongoDB 연결

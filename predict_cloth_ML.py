@@ -9,9 +9,9 @@ def predict_cloth(classification, img_url):
     np.set_printoptions(suppress=True)
 
     predict_file_path = {
-        "top" : ["C:/Users/user/backend/keras_model_top.h5", "C:/Users/user/backend/labels_top.txt"],
-        "bottom" : ["C:/Users/user/backend/keras_model_bottom.h5", "C:/Users/user/backend/labels_bottom.txt"],
-        "outer" : ["C:/Users/user/backend/keras_model_outer.h5", "C:/Users/user/backend/labels_outer.txt"]
+        "top": ["C:/Users/user/backend/keras_model_top.h5", "C:/Users/user/backend/labels_top.txt"],
+        "bottom": ["C:/Users/user/backend/keras_model_bottom.h5", "C:/Users/user/backend/labels_bottom.txt"],
+        "outer": ["C:/Users/user/backend/keras_model_outer.h5", "C:/Users/user/backend/labels_outer.txt"]
     }
 
     # 부위에 따른 로드하는 분류모델 변경요망
