@@ -3,7 +3,7 @@ import requests
 from multiprocessing import Pool
 import json
 import time
-import predict_cloth_ML as pred
+import classification_cloth_model as pred
 
 app = Flask(__name__)
 
