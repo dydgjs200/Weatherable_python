@@ -1,20 +1,17 @@
 from flask import Flask, request
 import requests
-from multiprocessing import Pool
 import json
 import time
-import classification_cloth_model as pred
+
+import classification_OneFile as onefile
 
 app = Flask(__name__)
 
+# onefile은 하나의 파일만 검색함
+
 # 전송할 스프링 서버 주소값
 spring_server_url = 'http://localhost:8080/sendmessage'
-headerToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhY2Nlc3MiLCJpYXQiOjE3MTAzNzk3MDcsImV4cCI6MTcxMTU4OTMwNywic3ViIjoiZmZmZiIsInNjb3BlIjoiUk9MRV9VU0VSIn0.3W_Kl-e0rMw4DP6LFKxqCe82CS6zsjR1ReWN19FRvgI"
-
-def predict_cloth_wrapper(args):
-    classification, url = args
-    return pred.predict_cloth(classification, url)
-
+headerToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhY2Nlc3MiLCJpYXQiOjE3MTA0NzYzNzEsImV4cCI6MTcxMTY4NTk3MSwic3ViIjoiZmZmZiIsInNjb3BlIjoiUk9MRV9VU0VSIn0.ImaEjebug4ERX5pYW9KEPNmcPy9VHqz14Hlo9_U6ii8"
 @app.route('/sendmessage', methods=['POST'])
 def handle_request():
     if request.method == 'POST':
@@ -22,23 +19,12 @@ def handle_request():
         data = request.json
         resDict = {}
 
-        # Extract classification and URLs from the received data
-        predictions_input = []
-        for classification, urls in data.items():
-            for url in urls:
-                predictions_input.append((classification, url))
+        for key, value in data.items():
+            img_url, style, score = onefile.predict_cloth(key, value)
 
-        # 멀티프로세스 처리 -> 실험을 3 부분으로 해서 3개로 프로세스 나눔
-        with Pool(processes=3) as pool:
-            results = pool.map(predict_cloth_wrapper, predictions_input)
+        resDict[style] = score
+        print(resDict)
 
-        # 딕셔너리에 결과값 저장
-        for result in results:
-            for k, v in result.items():
-                if k in resDict:
-                    resDict[k].append(v)
-                else:
-                    resDict[k] = [v]
 
         # 서버에 보내기
         try:
