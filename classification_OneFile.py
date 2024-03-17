@@ -4,21 +4,31 @@ import numpy as np
 from keras.models import load_model
 from io import BytesIO  # BytesIO를 임포트합니다.
 
+import os
+
 def predict_cloth(classification, img_url):
     # Disable scientific notation for clarity
     np.set_printoptions(suppress=True)
 
+    # 현재 스크립트 파일의 경로
+    current_dir = os.path.dirname(__file__)
+    model_dir = os.path.join(current_dir, 'KerasModels')
+
     predict_file_path = {
-        "Top": ["C:/Users/user/backend/keras_model_top.h5", "C:/Users/user/backend/labels_top.txt"],
-        "Bottom": ["C:/Users/user/backend/keras_model_bottom.h5", "C:/Users/user/backend/labels_bottom.txt"],
-        "Outer": ["C:/Users/user/backend/keras_model_outer.h5", "C:/Users/user/backend/labels_outer.txt"]
+        "Top": ["keras_model_top.h5", "labels_top.txt"],
+        "Bottom": ["keras_model_bottom.h5", "labels_bottom.txt"],
+        "Outer": ["keras_model_outer.h5", "labels_outer.txt"]
     }
 
-    # 부위에 따른 로드하는 분류모델 변경요망
-    model = load_model(predict_file_path[classification][0], compile=False)
+    # 부위에 따른 로드하는 분류모델 로드
+    model_file = predict_file_path[classification][0]
+    model_path = os.path.join(model_dir, model_file)
+    model = load_model(model_path, compile=False)
 
-    # Load the labels
-    class_names = open(predict_file_path[classification][1], "rt", encoding="UTF-8").readlines()
+    # 라벨 로드
+    label_file = predict_file_path[classification][1]
+    label_path = os.path.join(model_dir, label_file)
+    class_names = open(label_path, "rt", encoding="UTF-8").readlines()
 
     # Create the array of the right shape to feed into the keras model
     data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
