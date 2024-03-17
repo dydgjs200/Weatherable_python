@@ -10,25 +10,27 @@ app = Flask(__name__)
 # onefile은 하나의 파일만 검색함
 
 # 전송할 스프링 서버 주소값
-spring_server_url = 'http://localhost:8080/sendmessage'
+spring_server_url = 'http://43.201.22.187:8080/sendmessage'
 headerToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhY2Nlc3MiLCJpYXQiOjE3MTA0NzYzNzEsImV4cCI6MTcxMTY4NTk3MSwic3ViIjoiZmZmZiIsInNjb3BlIjoiUk9MRV9VU0VSIn0.ImaEjebug4ERX5pYW9KEPNmcPy9VHqz14Hlo9_U6ii8"
 
 
-@app.route('/postAddStyles', methods=['POST'])
+@app.route('/sendmessage', methods=['POST'])
 def handle_request():
     if request.method == 'POST':
         start_time = time.time()
 
         # "multipart/form-data" 형식의 데이터를 읽기 위해 request.form 사용
         data = request.form.to_dict()
+
         resDict = {}
 
-        print(data)
+        print("data > ", data)
 
         for key, value in data.items():
             img_url, style, score = onefile.predict_cloth(key, value)
+            resDict[style] = score
 
-        resDict[style] = score
+        # resDict[style] = score
         print(resDict)
 
         # 서버에 보내기
