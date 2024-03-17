@@ -9,9 +9,9 @@ def predict_cloth(classification, img_url):
     np.set_printoptions(suppress=True)
 
     predict_file_path = {
-        "top": ["C:/Users/user/backend/keras_model_top.h5", "C:/Users/user/backend/labels_top.txt"],
-        "bottom": ["C:/Users/user/backend/keras_model_bottom.h5", "C:/Users/user/backend/labels_bottom.txt"],
-        "outer": ["C:/Users/user/backend/keras_model_outer.h5", "C:/Users/user/backend/labels_outer.txt"]
+        "Top": ["C:/Users/user/backend/keras_model_top.h5", "C:/Users/user/backend/labels_top.txt"],
+        "Bottom": ["C:/Users/user/backend/keras_model_bottom.h5", "C:/Users/user/backend/labels_bottom.txt"],
+        "Outer": ["C:/Users/user/backend/keras_model_outer.h5", "C:/Users/user/backend/labels_outer.txt"]
     }
 
     # 부위에 따른 로드하는 분류모델 변경요망
@@ -56,11 +56,11 @@ def predict_cloth(classification, img_url):
 
     # return {img_url: [class_name[2:], str(confidence_score)]}
     style_list = {
-        "top" : ["캐주얼 상의\n", "고프고어 상의\n", "포멀 상의\n", "스포티 상의\n", "레트로 상의\n"],
-        "bottom": ["캐주얼 하의\n", "고프코어 하의\n", "포멀 하의\n", "스포티 하의\n", "레트로 하의\n"],
-        "outer": ["캐주얼 아우터\n", "고프코어 아우터\n", "포멀 아우터\n", "스포티 아우터\n", "레트로 아우터\n"],
-        "shoes": ["캐주얼 신발\n", "고프코어 신발\n", "포멀 신발\n", "스포티 신발\n", "레트로 신발\n"],
-        "hat": ["캐주얼 모자\n", "고프코어 모자\n", "포멀 모자\n", "스포티 모자\n", "레트로 모자\n"]
+        "Top" : ["캐주얼 상의\n", "고프고어 상의\n", "포멀 상의\n", "스포티 상의\n", "레트로 상의\n"],
+        "Bottom": ["캐주얼 하의\n", "고프코어 하의\n", "포멀 하의\n", "스포티 하의\n", "레트로 하의\n"],
+        "Outer": ["캐주얼 아우터\n", "고프코어 아우터\n", "포멀 아우터\n", "스포티 아우터\n", "레트로 아우터\n"],
+        "Shoes": ["캐주얼 신발\n", "고프코어 신발\n", "포멀 신발\n", "스포티 신발\n", "레트로 신발\n"],
+        "Hat": ["캐주얼 모자\n", "고프코어 모자\n", "포멀 모자\n", "스포티 모자\n", "레트로 모자\n"]
     }
 
     # score는 float32형이지만, json에서 전달 불가하므로 문자열로 처리
