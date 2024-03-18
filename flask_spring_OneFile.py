@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 # 전송할 스프링 서버 주소값
 spring_server_url = 'http://43.201.22.187:8080/sendmessage'
-headerToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhY2Nlc3MiLCJpYXQiOjE3MTA0NzYzNzEsImV4cCI6MTcxMTY4NTk3MSwic3ViIjoiZmZmZiIsInNjb3BlIjoiUk9MRV9VU0VSIn0.ImaEjebug4ERX5pYW9KEPNmcPy9VHqz14Hlo9_U6ii8"
+headerToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhY2Nlc3MiLCJpYXQiOjE3MTA3MjE4NzIsImV4cCI6MTcxMTkzMTQ3Miwic3ViIjoiYSIsInNjb3BlIjoiUk9MRV9VU0VSIn0.5mR3H0XvqzzIJXIGontK8W5Xsw-ZIguWiym6QNxwc7o"
 
 @app.route('/sendmessage', methods=['POST'])
 def handle_request():
