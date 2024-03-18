@@ -17,7 +17,9 @@ def predict_cloth(classification, img_url):
     predict_file_path = {
         "Top": ["keras_model_top.h5", "labels_top.txt"],
         "Bottom": ["keras_model_bottom.h5", "labels_bottom.txt"],
-        "Outer": ["keras_model_outer.h5", "labels_outer.txt"]
+        "Outer": ["keras_model_outer.h5", "labels_outer.txt"],
+        "Shoes": ["keras_model_shoes.h5", "labels_shoes.txt"],
+        "Hat": ["keras_model_hat.h5", "labels_hat.txt"]
     }
 
     # 부위에 따른 로드하는 분류모델 로드
