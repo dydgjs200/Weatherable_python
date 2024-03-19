@@ -1,13 +1,15 @@
 import os
-from flask import Flask, request
+from flask import Flask, request, make_response
 import requests
 import json
 import time
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 import classification_OneFile as onefile
 
 app = Flask(__name__)
+CORS(app, resources={'/sendmessage': {"origins": "http://localhost:3000/closet/1/addclothes"}})
 load_dotenv()
 
 # onefile은 하나의 파일만 검색함
