@@ -39,12 +39,12 @@ def handle_request():
         try:
             headers = {"Authorization": headerToken}
             response = requests.post(next_server_url, json=json.dumps(resDict, ensure_ascii=False), headers=headers)
-            print("Response from Spring server:", response.text, response.status_code)
+            print("Response from server:", response.text, response.status_code)
 
             end_time = time.time()
             print(f"Total execution time: {end_time - start_time}")
 
-            return 'POST request received successfully and forwarded to Spring server!'
+            return 'POST request received successfully and forwarded to server!'
         except Exception as e:
             print("Error while sending data to Spring server:", str(e))
             return 'Error while sending data to Spring server!'
