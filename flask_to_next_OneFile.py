@@ -23,6 +23,7 @@ headerToken = os.getenv("HEADERTOKEN")
 @app.route('/sendmessage', methods=['POST'])
 def handle_request():
     if request.method == 'POST':
+
         start_time = time.time()
 
         # "multipart/form-data" 형식의 데이터를 읽기 위해 request.form 사용
