@@ -9,7 +9,8 @@ from flask_cors import CORS
 import classification_OneFile as onefile
 
 app = Flask(__name__)
-CORS(app, resources={'/sendmessage': {"origins": "http://localhost:3000/closet/1/addclothes"}})
+# CORS(app, resources={'/sendmessage': {"origins": "http://localhost:3000/closet/1/addclothes"}})
+CORS(app, supports_credentials=True)
 load_dotenv()
 
 # onefile은 하나의 파일만 검색함
@@ -17,6 +18,7 @@ load_dotenv()
 # 전송할 스프링 서버 주소값
 next_server_url = os.getenv("NEXT_SERVER_URL")
 headerToken = os.getenv("HEADERTOKEN")
+
 
 @app.route('/sendmessage', methods=['POST'])
 def handle_request():
@@ -39,18 +41,19 @@ def handle_request():
 
         # 서버에 보내기
         try:
-            headers = {"Authorization": headerToken}
-            response = requests.post(next_server_url, json=json.dumps(resDict, ensure_ascii=False), headers=headers)
-            print("Response from server:", response.text, response.status_code)
+            # headers = {"Authorization": headerToken}
+            # response = requests.post(next_server_url, json=json.dumps(resDict, ensure_ascii=False), headers=headers)
+            # print("Response from server:", response.text, response.status_code)
 
             end_time = time.time()
             print(f"Total execution time: {end_time - start_time}")
 
-            return 'POST request received successfully and forwarded to server!'
+            # return 'POST request received successfully and forwarded to server!'
+            return resDict
         except Exception as e:
             print("Error while sending data to Spring server:", str(e))
             return 'Error while sending data to Spring server!'
 
 
 if __name__ == '__main__':
-    app.run(host=os.getenv("HOST_IP"), port=os.getenv("PORT"))
+    app.run(host=os.getenv("HOST_IP"), port=os.getenv("PORT"), debug=True)
