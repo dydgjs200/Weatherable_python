@@ -4,7 +4,6 @@ import requests
 import json
 import time
 from dotenv import load_dotenv
-
 import classification_OneFile as onefile
 
 app = Flask(__name__)
