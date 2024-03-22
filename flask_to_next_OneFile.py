@@ -5,6 +5,7 @@ import json
 import time
 from dotenv import load_dotenv
 from flask_cors import CORS
+from openAi_server import ai_server
 
 import classification_OneFile as onefile
 
@@ -54,6 +55,15 @@ def handle_request():
         except Exception as e:
             print("Error while sending data to Spring server:", str(e))
             return 'Error while sending data to Spring server!'
+
+@app.route('/clothesAi', methods=['POST'])
+def handled_clothesAi():
+    if request.method == 'POST':
+        message = ai_server()
+        print(message)
+
+        return message
+
 
 
 if __name__ == '__main__':
