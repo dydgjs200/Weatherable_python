@@ -20,7 +20,6 @@ next_server_url = os.getenv("NEXT_SERVER_URL")
 spring_server_url = os.getenv("SPRING_SERVER_URL")
 headerToken = os.getenv("HEADERTOKEN")
 
-
 @app.route('/sendmessage', methods=['POST'])
 def handle_request():
     if request.method == 'POST':
@@ -49,19 +48,26 @@ def handle_request():
             print("Error while sending data to Spring server:", str(e))
             return 'Error while sending data to Spring server!'
 
-@app.route('/clothesAi', methods=['POST'])
+@app.route('/recommend/cloth', methods=['GET'])
 def handled_clothesAi():
-    if request.method == 'POST':
+    if request.method == 'GET':
+        accessToken = request.headers["Authorization"]
+        print("tt", accessToken)
         cloth_list = request.json
 
         # openai 응답 메시지
-        message = ai_server(cloth_list)
+        response = ai_server(cloth_list)
+        params = {"response" : response}
+        print(response)
 
         try:
-            response = requests.post(spring_server_url, data=message)
-            if response.status_code == 200:
+            headers = {'Authorization': accessToken}
+            message = requests.get(spring_server_url, params=params, headers=headers)
+            if message.status_code == 200:
+                print("rrr >", message.text)
                 return jsonify({"message" : "send success"})
             else:
+                print("rrr >" , message.text)
                 return jsonify({"message" : "send fail"})
         except requests.exceptions.RequestException as e:
             return jsonify({'error': 'Failed to send data: ' + str(e)})
