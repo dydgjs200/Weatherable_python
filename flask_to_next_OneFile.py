@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, jsonify
 import requests
 import json
 import time
@@ -10,7 +10,6 @@ from openAi_server import ai_server
 import classification_OneFile as onefile
 
 app = Flask(__name__)
-# CORS(app, resources={'/sendmessage': {"origins": "http://localhost:3000/closet/1/addclothes"}})
 CORS(app, supports_credentials=True)
 load_dotenv()
 
@@ -18,6 +17,7 @@ load_dotenv()
 
 # 전송할 스프링 서버 주소값
 next_server_url = os.getenv("NEXT_SERVER_URL")
+spring_server_url = os.getenv("SPRING_SERVER_URL")
 headerToken = os.getenv("HEADERTOKEN")
 
 
@@ -27,7 +27,6 @@ def handle_request():
 
         start_time = time.time()
 
-        # "multipart/form-data" 형식의 데이터를 읽기 위해 request.form 사용
         data = request.form.to_dict()
 
         resDict = {}
@@ -38,19 +37,13 @@ def handle_request():
             img_url, style, score = onefile.predict_cloth(key, value)
             resDict[style] = score
 
-        # resDict[style] = score
         print(resDict)
 
         # 서버에 보내기
         try:
-            # headers = {"Authorization": headerToken}
-            # response = requests.post(next_server_url, json=json.dumps(resDict, ensure_ascii=False), headers=headers)
-            # print("Response from server:", response.text, response.status_code)
-
             end_time = time.time()
             print(f"Total execution time: {end_time - start_time}")
 
-            # return 'POST request received successfully and forwarded to server!'
             return resDict
         except Exception as e:
             print("Error while sending data to Spring server:", str(e))
@@ -59,16 +52,19 @@ def handle_request():
 @app.route('/clothesAi', methods=['POST'])
 def handled_clothesAi():
     if request.method == 'POST':
-
         cloth_list = request.json
 
+        # openai 응답 메시지
         message = ai_server(cloth_list)
-        print(message)
-        sp = message.split("\n")
 
-        print("sp > ", sp)
-
-        return message
+        try:
+            response = requests.post(spring_server_url, data=message)
+            if response.status_code == 200:
+                return jsonify({"message" : "send success"})
+            else:
+                return jsonify({"message" : "send fail"})
+        except requests.exceptions.RequestException as e:
+            return jsonify({'error': 'Failed to send data: ' + str(e)})
 
 
 
