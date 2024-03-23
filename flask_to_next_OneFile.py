@@ -59,8 +59,14 @@ def handle_request():
 @app.route('/clothesAi', methods=['POST'])
 def handled_clothesAi():
     if request.method == 'POST':
-        message = ai_server()
+
+        cloth_list = request.json
+
+        message = ai_server(cloth_list)
         print(message)
+        sp = message.split("\n")
+
+        print("sp > ", sp)
 
         return message
 
