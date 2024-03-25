@@ -1,7 +1,6 @@
 import os
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, request, jsonify
 import requests
-import json
 import time
 from dotenv import load_dotenv
 from flask_cors import CORS
@@ -18,9 +17,8 @@ load_dotenv()
 # 전송할 스프링 서버 주소값
 next_server_url = os.getenv("NEXT_SERVER_URL")
 spring_server_url = os.getenv("SPRING_SERVER_URL")
-headerToken = os.getenv("HEADERTOKEN")
 
-@app.route('/sendmessage', methods=['POST'])
+@app.route('/closet/styleai', methods=['POST'])
 def handle_request():
     if request.method == 'POST':
 
@@ -51,8 +49,7 @@ def handle_request():
 @app.route('/recommend/cloth', methods=['GET'])
 def handled_clothesAi():
     if request.method == 'GET':
-        accessToken = request.headers["Authorization"]
-        print("tt", accessToken)
+        accessToken = request.headers["Authorization"]      # jwt 토큰
         cloth_list = request.json
 
         # openai 응답 메시지
@@ -61,7 +58,7 @@ def handled_clothesAi():
         print(response)
 
         try:
-            headers = {'Authorization': accessToken}
+            headers = {'Authorization': accessToken}       # jwt 토큰 헤더 설정
             message = requests.get(spring_server_url, params=params, headers=headers)
             if message.status_code == 200:
                 print("rrr >", message.text)
@@ -72,7 +69,12 @@ def handled_clothesAi():
         except requests.exceptions.RequestException as e:
             return jsonify({'error': 'Failed to send data: ' + str(e)})
 
+@app.route('/dddd', methods=["GET"])
+def handle_weather():
+    if request.method == "GET":
+        ans = request.json
 
+    return ans
 
 if __name__ == '__main__':
     app.run(host=os.getenv("HOST_IP"), port=os.getenv("PORT"), debug=True)
