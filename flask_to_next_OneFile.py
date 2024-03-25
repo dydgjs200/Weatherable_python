@@ -6,6 +6,10 @@ from dotenv import load_dotenv
 from flask_cors import CORS
 from openAi_server import ai_server
 
+import json
+
+import re
+
 import classification_OneFile as onefile
 
 app = Flask(__name__)
@@ -61,20 +65,19 @@ def handled_clothesAi():
             headers = {'Authorization': accessToken}       # jwt 토큰 헤더 설정
             message = requests.get(spring_server_url, params=params, headers=headers)
             if message.status_code == 200:
-                print("rrr >", message.text)
-                return jsonify({"message" : "send success"})
+                data = json.loads(message.text)
+                print(data)
+                # print("data > ", data)
+                # for d in data:
+                #     print("d > ", json.dumps(d))
+
+                return jsonify({"message" : data})
             else:
                 print("rrr >" , message.text)
                 return jsonify({"message" : "send fail"})
         except requests.exceptions.RequestException as e:
             return jsonify({'error': 'Failed to send data: ' + str(e)})
 
-@app.route('/dddd', methods=["GET"])
-def handle_weather():
-    if request.method == "GET":
-        ans = request.json
-
-    return ans
 
 if __name__ == '__main__':
     app.run(host=os.getenv("HOST_IP"), port=os.getenv("PORT"), debug=True)
