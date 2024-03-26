@@ -50,9 +50,9 @@ def handle_request():
             print("Error while sending data to Spring server:", str(e))
             return 'Error while sending data to Spring server!'
 
-@app.route('/recommend/cloth', methods=['GET'])
+@app.route('/recommend/cloth', methods=['POST'])
 def handled_clothesAi():
-    if request.method == 'GET':
+    if request.method == 'POST':
         accessToken = request.headers["Authorization"]      # jwt 토큰
         cloth_list = request.json
 
